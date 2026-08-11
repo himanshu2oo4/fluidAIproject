@@ -7,6 +7,8 @@ on:
       - "app/**"
       - "k8s/**"
       - ".github/workflows/deploy.yml"
+
+  workflow_dispatch: 
 env:
   IMAGE_NAME: backend_app
   CLUSTER_NAME: project
