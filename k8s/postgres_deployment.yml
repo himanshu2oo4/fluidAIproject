@@ -1,0 +1,72 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata: 
+  name: postgres
+  namespace: project 
+spec: 
+  replicas: 1 
+  selector: 
+    matchLabels: 
+      app: postgres 
+  template: 
+    metadata: 
+      labels: 
+        app: postgres 
+    spec: 
+      containers: 
+        - name: postgres 
+          image: postgres:16-alpine
+          ports: 
+            - containerPort: 5432 
+          env: 
+            - name: POSTGRES_USER
+              valueFrom: 
+                secretKeyRef: 
+                  name: db-credentials 
+                  key: DB_USER 
+
+            - name: POSTGRES_PASSWORD
+              valueFrom: 
+                secretKeyRef: 
+                  name: db-credentials 
+                  key: DB_PASSWORD 
+            - name: POSTGRES_DB
+              valueFrom:
+                secretKeyRef:
+                  name: db-credentials
+                  key: DB_NAME
+
+            - name: PGDATA 
+              value: /var/lib/postgresql/data/pgdata
+
+          volumeMounts: 
+            - name: postgres-storage 
+              mountPath: /var/lib/postgresql/data
+
+          resources: 
+            requests: 
+              cpu: 100m 
+              memory: 128Mi 
+            limits: 
+              memory: 256Mi 
+          readinessProbe:
+            exec:
+              command: ["pg_isready" , "-U" , "appuser" , "-d" , "appdb"]
+            initialDelaySeconds: 5     # mandatory to wait 
+            periodSeconds: 5 
+            timeoutSeconds: 3  
+
+
+          livenessProbe: 
+            exec: 
+              command: ["pg_isready" , "-U" , "appuser" , "-d" , "appdb"]
+            initialDelaySeconds: 5 
+            periodSeconds: 10 
+            timeoutSeconds: 3 
+
+
+      volumes: 
+        - name: postgres-storage 
+          persistentVolumeClaim: 
+            claimName: postgres-pvc 
+
