@@ -32,7 +32,7 @@ jobs:
         run: | 
           cd k8s
           kubectl apply -f namespace.yml 
-          kubectl apply -f secret.yml 
+          kubectl apply -f secrets.yml 
           kubectl apply -f postgres_pvc_claim.yml 
           kubectl apply -f postgres_deployment.yml 
           kubectl apply -f postgres_service.yml 
@@ -53,7 +53,8 @@ jobs:
           echo "--- Smoke test ---"
           kubectl run smoke-test --rm -i --restart=Never --image=curlimages/curl -n ${{ env.NAMESPACE }}
           curl -sf http://backend:8080/ready || (echo "SMOKE TEST FAILED"; exit 1)
-          
+          # exposing it using port-forward 
+          kubectl port-forward svc/backend 30000:8080 -n project --address=0.0.0.0 
 
           
           
