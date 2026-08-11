@@ -58,7 +58,7 @@ jobs:
            -n ${{ env.NAMESPACE }} \
             -- curl -sf http://backend:8080/ready
           # exposing it using port-forward 
-          kubectl port-forward svc/backend 30000:8080 -n project --address=0.0.0.0 
+          
 
           
           
