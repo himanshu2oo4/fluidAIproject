@@ -22,9 +22,9 @@ jobs:
         uses: actions/checkout@v4
       - name: Build Docker image 
         run: | 
-          docker build -t ${{ env.IMAGE_NAME }}:latest ./app
+          docker build -t ${{ env.IMAGE_NAME }}:latest .
       - name: Load image to the kind cluster 
-        run: kind load docker-image ${{env.IMAGE_NAME}}:latest ./app 
+        run: kind load docker-image ${{env.IMAGE_NAME}}:latest .
       - name: Ensure correct kube context \
         run: kubectl config use-context kind-${{env.CLUSTER_NAME}}
 
