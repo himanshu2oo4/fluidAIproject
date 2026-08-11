@@ -30,13 +30,14 @@ jobs:
 
       - name: Apply base manifests 
         run: | 
-          kubectl apply -f k8s/namespace.yml 
-          kubectl apply -f k8s/secret.yml 
-          kubectl apply -f k8s/postgres_pvc_claim.yml 
-          kubectl apply -f k8s/postgres_deployment.yml 
-          kubectl apply -f k8s/postgres_service.yml 
-          kubectl apply -f k8s/backend_dep.yml 
-          kubectl apply -f k8s/backend-service.yml
+          cd k8s
+          kubectl apply -f namespace.yml 
+          kubectl apply -f secret.yml 
+          kubectl apply -f postgres_pvc_claim.yml 
+          kubectl apply -f postgres_deployment.yml 
+          kubectl apply -f postgres_service.yml 
+          kubectl apply -f backend_dep.yml 
+          kubectl apply -f backend-service.yml
       # rollout: Updating to the latest version : automatically latest version gonna be used in the pods containers background: 
         # rollout basically depends on the type of deployment strategy mainly ROLLINGUPDATE 
       - name: wait for rollout to complete 
