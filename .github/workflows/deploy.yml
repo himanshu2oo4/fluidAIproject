@@ -24,7 +24,7 @@ jobs:
         run: | 
           docker build -t ${{ env.IMAGE_NAME }}:latest .
       - name: Load image to the kind cluster 
-        run: kind load docker-image ${{env.IMAGE_NAME}}:latest .
+        run: kind load docker-image ${{env.IMAGE_NAME}}:latest 
       - name: Ensure correct kube context \
         run: kubectl config use-context kind-${{env.CLUSTER_NAME}}
 
